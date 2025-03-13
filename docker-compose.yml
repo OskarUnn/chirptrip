@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    volumes:
+      - ./chirptrip-posgresql-data:/var/lib/postgresql/data
+    networks:
+      - chirptrip-network
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: chirptrip_db
+      POSTGRES_USER: chirptrip_user
+      POSTGRES_PASSWORD: chirptrip_password
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+networks:
+  chirptrip-network:
+    driver: bridge
+
