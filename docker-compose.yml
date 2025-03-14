@@ -11,13 +11,21 @@ services:
       - SPRING_DATASOURCE_USERNAME=chirptrip_user
       - SPRING_DATASOURCE_PASSWORD=chirptrip_password
 
+  frontend:
+    build: frontend
+    ports:
+      - 80:80
+    depends_on:
+      backend:
+        condition: service_started
+
   db:
     image: postgres:16
     restart: always
     volumes:
       - ./chirptrip-posgresql-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       POSTGRES_DB: chirptrip_db
       POSTGRES_USER: chirptrip_user
