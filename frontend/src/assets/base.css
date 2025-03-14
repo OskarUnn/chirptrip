@@ -19,34 +19,49 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
+  /* Blue color palette */
+  --primary-blue: #1e3a8a;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e40af;
+  --accent-blue: #60a5fa;
+  --light-blue: #93c5fd;
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
+  /* Background colors */
+  --bg-white: #ffffff;
+  --bg-light: #f3f4f6;
+  --bg-dark: #1f2937;
 
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
+  /* Text colors */
+  --text-dark: #1f2937;
+  --text-light: #f3f4f6;
+  --text-muted: #6b7280;
+
+  /* Semantic colors */
+  --color-background: var(--bg-white);
+  --color-background-soft: var(--bg-light);
+  --color-background-mute: var(--bg-light);
+
+  --color-border: var(--light-blue);
+  --color-border-hover: var(--primary-light);
+
+  --color-heading: var(--primary-blue);
+  --color-text: var(--text-dark);
 
   --section-gap: 160px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+    --color-background: var(--bg-dark);
+    --color-background-soft: var(--primary-dark);
+    --color-background-mute: var(--primary-dark);
 
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
+    --color-border: var(--primary-light);
+    --color-border-hover: var(--accent-blue);
 
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
+    --color-heading: var(--light-blue);
+    --color-text: var(--text-light);
   }
 }
 
@@ -62,23 +77,9 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
+  transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
