@@ -4,8 +4,6 @@ services:
     restart: always
     volumes:
       - ./chirptrip-posgresql-data:/var/lib/postgresql/data
-    networks:
-      - chirptrip-network
     ports:
       - "5432:5432"
     environment:
@@ -18,8 +16,4 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
-
-networks:
-  chirptrip-network:
-    driver: bridge
 

@@ -1,9 +1,7 @@
 package chirptrip.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,11 +11,20 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "flight")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Flight {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String sourceAirport;
-    private String destinationAirport;
+
+    @ManyToOne
+    @JoinColumn(name = "source_id", nullable = false)
+    private Airport source;
+
+    @ManyToOne
+    @JoinColumn(name = "destination_id", nullable = false)
+    private Airport destination;
+
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private ZonedDateTime departureTime;
 }

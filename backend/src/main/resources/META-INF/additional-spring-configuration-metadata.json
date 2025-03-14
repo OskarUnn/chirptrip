@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "openflights.data.airports",
+      "type": "java.lang.String",
+      "description": "Filepath of openflights airports .dat file."
+  }
+] }
