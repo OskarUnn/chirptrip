@@ -1,6 +1,6 @@
 package chirptrip.backend.controller;
 
-import chirptrip.backend.entity.Flight;
+import chirptrip.backend.dto.FlightDTO;
 import chirptrip.backend.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class FlightController {
     private final FlightService flightService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Flight>> getAllFlights() {
-        return ResponseEntity.ok().body(flightService.getAllFlights());
+    public ResponseEntity<List<FlightDTO>> getAllFlights() {
+        return ResponseEntity.ok().body(flightService.getAllFlightDTOs());
     }
 }

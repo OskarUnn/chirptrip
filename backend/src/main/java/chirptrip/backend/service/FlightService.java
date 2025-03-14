@@ -1,5 +1,6 @@
 package chirptrip.backend.service;
 
+import chirptrip.backend.dto.FlightDTO;
 import chirptrip.backend.entity.Flight;
 import chirptrip.backend.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class FlightService {
 
     private final FlightRepository flightRepository;
 
-    public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+    public List<FlightDTO> getAllFlightDTOs() {
+        return flightRepository.findAll().stream().map(Flight::toDTO).toList();
     }
 }
