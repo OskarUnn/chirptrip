@@ -3,6 +3,19 @@ import { defineProps } from 'vue'
 import type { Flight } from '@/types/Flight'
 
 const props = defineProps<{ flight: Flight }>()
+
+function formatDuration(seconds: number) {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  return `${hours}h ${minutes}m`
+}
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat('et-EE', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(price)
+}
 </script>
 
 <template>
@@ -11,6 +24,14 @@ const props = defineProps<{ flight: Flight }>()
     <p>
       <strong>Departure:</strong>
       {{ new Date(flight.departureTime * 1000).toLocaleString('et-EE') }}
+    </p>
+    <p>
+      <strong>Duration:</strong>
+      {{ formatDuration(flight.duration) }}
+    </p>
+    <p>
+      <strong>Price:</strong>
+      {{ formatPrice(flight.price) }}
     </p>
   </div>
 </template>

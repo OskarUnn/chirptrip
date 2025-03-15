@@ -3,4 +3,6 @@ export interface Flight {
   sourceCityName: string
   destinationCityName: string
   departureTime: number
+  duration: number
+  price: number
 }
