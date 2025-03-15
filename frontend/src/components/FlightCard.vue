@@ -8,7 +8,10 @@ const props = defineProps<{ flight: Flight }>()
 <template>
   <div class="flight-card">
     <h2>{{ flight.sourceCityName }} ✈ {{ flight.destinationCityName }}</h2>
-    <p><strong>Departure:</strong> {{ new Date(flight.departureTime).toLocaleString() }}</p>
+    <p>
+      <strong>Departure:</strong>
+      {{ new Date(flight.departureTime * 1000).toLocaleString('et-EE') }}
+    </p>
   </div>
 </template>
 
