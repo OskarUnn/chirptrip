@@ -6,8 +6,8 @@ import FlightCard from '@/components/FlightCard.vue'
 
 const allFlights = ref<Flight[]>([])
 const filters = ref({
-  sourceCity: '',
-  destinationCity: '',
+  source: '',
+  destination: '',
   maxPrice: null as number | null,
 })
 
@@ -33,7 +33,7 @@ defineExpose({ updateFilters })
 
 <template>
   <div class="flight-list">
-    <h1>Available Flights</h1>
+    <h1>Available Flights ({{ filteredFlights.length }})</h1>
     <div v-if="isLoading" class="loading">Loading flights...</div>
     <div v-else-if="filteredFlights.length" class="flight-grid">
       <FlightCard

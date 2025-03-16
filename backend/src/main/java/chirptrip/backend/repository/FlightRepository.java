@@ -16,10 +16,14 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
     @Query("SELECT f FROM Flight f " +
             "JOIN f.source s " +
             "JOIN f.destination d " +
-            "WHERE (:sourceCity IS NULL OR s.city = :sourceCity) " +
-            "AND (:destinationCity IS NULL OR d.city = :destinationCity) ")
-    List<Flight> findFlights(@Param("sourceCity") String sourceCity,
-                             @Param("destinationCity") String destinationCity,
-                             @Param("maxPrice") BigDecimal maxPrice,
-                             @Param("date") ZonedDateTime date);
+            "WHERE (:source IS NULL OR s.iata = :source OR s.city = :source OR s.country = :source) " +
+            "AND (:destination IS NULL OR d.iata = :destination OR d.city = :destination OR d.country = :destination)" +
+            "AND (:maxPrice IS NULL OR f.price <= :maxPrice) ")
+    List<Flight> findFlights(
+            @Param("source") String source,
+            @Param("destination") String destination,
+            @Param("maxPrice") BigDecimal maxPrice,
+            @Param("departureStart") ZonedDateTime departureStart,
+            @Param("departureEnd") ZonedDateTime departureEnd
+    );
 }

@@ -22,11 +22,17 @@ public class FlightController {
 
     @GetMapping("/")
     public ResponseEntity<List<FlightDTO>> getFlights(
-            @RequestParam(required = false) String sourceCity,
-            @RequestParam(required = false) String destinationCity,
+            @RequestParam(required = false) String source,
+            @RequestParam(required = false) String destination,
             @RequestParam(required = false) Double maxPrice,
-            @RequestParam(required = false) String date) {
+            @RequestParam(required = false) String departureDateStart,
+            @RequestParam(required = false) String departureDateEnd) {
 
-        return ResponseEntity.ok().body(flightService.getFilteredFlights(sourceCity, destinationCity, maxPrice, date));
+        return ResponseEntity.ok().body(flightService.getFilteredFlights(
+                source,
+                destination,
+                maxPrice,
+                departureDateStart,
+                departureDateEnd));
     }
 }

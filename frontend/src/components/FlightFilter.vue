@@ -5,28 +5,28 @@ const emit = defineEmits<{
   (
     e: 'filter',
     filters: {
-      sourceCity: string
-      destinationCity: string
+      source: string
+      destination: string
       maxPrice: number | null
     },
   ): void
 }>()
 
-const sourceCity = ref('')
-const destinationCity = ref('')
+const source = ref('')
+const destination = ref('')
 const maxPrice = ref<number | null>(null)
 
 function applyFilters() {
   emit('filter', {
-    sourceCity: sourceCity.value,
-    destinationCity: destinationCity.value,
+    source: source.value,
+    destination: destination.value,
     maxPrice: maxPrice.value,
   })
 }
 
 function resetFilters() {
-  sourceCity.value = ''
-  destinationCity.value = ''
+  source.value = ''
+  destination.value = ''
   maxPrice.value = null
   applyFilters()
 }
@@ -37,22 +37,24 @@ function resetFilters() {
     <h2>Filter Flights</h2>
     <div class="filter-form">
       <div class="filter-group">
-        <label for="sourceCity">From City:</label>
+        <label for="source">From:</label>
         <input
-          id="sourceCity"
-          v-model="sourceCity"
+          id="source"
+          v-model="source"
           type="text"
-          placeholder="Enter departure city"
+          placeholder="city, country or airport"
+          @keyup.enter="applyFilters"
         />
       </div>
 
       <div class="filter-group">
-        <label for="destinationCity">To City:</label>
+        <label for="destination">To:</label>
         <input
-          id="destinationCity"
-          v-model="destinationCity"
+          id="destination"
+          v-model="destination"
           type="text"
-          placeholder="Enter destination city"
+          placeholder="city, country or airport"
+          @keyup.enter="applyFilters"
         />
       </div>
 
@@ -64,6 +66,7 @@ function resetFilters() {
           type="number"
           min="0"
           placeholder="Enter maximum price"
+          @keyup.enter="applyFilters"
         />
       </div>
 
