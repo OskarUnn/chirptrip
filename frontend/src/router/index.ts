@@ -9,6 +9,11 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+    {
+      path: '/flight/:flightId/seats',
+      name: 'seat-selection',
+      component: () => import('../views/SeatSelection.vue'),
+    },
     // {
     //   path: '/about',
     //   name: 'about',

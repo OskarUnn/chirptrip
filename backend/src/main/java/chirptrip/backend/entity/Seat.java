@@ -26,6 +26,6 @@ public class Seat {
     private int seatColumn;
 
     public SeatDTO toDTO() {
-        return new SeatDTO(seatRow, seatColumn, occupied);
+        return new SeatDTO(id, seatRow, seatColumn, occupied);
     }
 }

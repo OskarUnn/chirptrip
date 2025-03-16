@@ -42,6 +42,12 @@ function formatPrice(price: number) {
       <strong>Price:</strong>
       {{ formatPrice(flight.price) }}
     </p>
+    <router-link
+      :to="{ name: 'seat-selection', params: { flightId: flight.id } }"
+      class="select-seat-button"
+    >
+      Select Seat
+    </router-link>
   </div>
 </template>
 
@@ -72,5 +78,19 @@ function formatPrice(price: number) {
 .flight-card p {
   color: var(--text-muted);
   font-size: 1rem;
+}
+
+.select-seat-button {
+  display: inline-block;
+  background: var(--primary-blue);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+.select-seat-button:hover {
+  background: var(--primary-dark);
 }
 </style>

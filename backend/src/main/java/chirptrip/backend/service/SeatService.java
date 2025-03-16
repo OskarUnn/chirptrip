@@ -5,6 +5,7 @@ import chirptrip.backend.entity.Flight;
 import chirptrip.backend.entity.Seat;
 import chirptrip.backend.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SeatService {
 
     private final SeatRepository seatRepository;
@@ -41,5 +43,19 @@ public class SeatService {
         }
 
         seatRepository.saveAll(seats);
+    }
+
+    public void bookSeats(List<SeatDTO> bookedSeats) {
+        List<Seat> seats = seatRepository.findAllById(bookedSeats.stream().map(SeatDTO::getId).toList());
+
+        // Check if seats are unoccupied
+        if (seats.stream().anyMatch(Seat::isOccupied)) {
+            throw new RuntimeException("Can't book occupied seats!");
+        }
+
+        seats.forEach(seat -> seat.setOccupied(true));
+        seatRepository.saveAll(seats);
+
+        log.info("Successfully made {} new bookings.", seats.size());
     }
 }
