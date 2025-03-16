@@ -2,7 +2,10 @@
 import { defineProps } from 'vue'
 import type { Flight } from '@/types/Flight'
 
-const props = defineProps<{ flight: Flight }>()
+defineProps<{
+  flight: Flight
+  hideSource?: boolean
+}>()
 
 function formatDuration(seconds: number) {
   const hours = Math.floor(seconds / 3600)
@@ -20,7 +23,13 @@ function formatPrice(price: number) {
 
 <template>
   <div class="flight-card">
-    <h2>{{ flight.sourceCityName }} ✈ {{ flight.destinationCityName }}</h2>
+    <h2>
+      <template v-if="!hideSource">
+        {{ flight.sourceCity }}, {{ flight.sourceCountry }} ✈
+      </template>
+      {{ flight.destinationCity }}, {{ flight.destinationCountry }}
+    </h2>
+    <p>{{ flight.sourceIata }} ✈ {{ flight.destinationIata }}</p>
     <p>
       <strong>Departure:</strong>
       {{ new Date(flight.departureTime * 1000).toLocaleString('et-EE') }}

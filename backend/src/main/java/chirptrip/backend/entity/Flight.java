@@ -32,18 +32,24 @@ public class Flight {
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private ZonedDateTime departureTime;
 
+    private BigDecimal price;
+
     public FlightDTO toDTO() {
         return new FlightDTO(id,
+                source.getIata(),
                 source.getCity(),
+                source.getCountry(),
+                destination.getIata(),
                 destination.getCity(),
+                destination.getCountry(),
                 departureTime,
                 getDuration(),
                 getPrice()
         );
     }
 
-    public BigDecimal getPrice() {
-        return BigDecimal.valueOf(getDistance() * 0.1).setScale(2, RoundingMode.HALF_UP);
+    public void setPrice(double price) {
+        this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP);
     }
 
     public Duration getDuration() {

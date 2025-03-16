@@ -17,7 +17,12 @@ onMounted(loadFlights)
   <div class="flight-list">
     <h1>Available Flights</h1>
     <div v-if="flights.length" class="flight-grid">
-      <FlightCard v-for="flight in flights" :key="flight.id" :flight="flight" />
+      <FlightCard
+        v-for="flight in flights"
+        :key="flight.id"
+        :flight="flight"
+        :hide-source="false"
+      />
     </div>
     <p v-else class="loading">Loading flights...</p>
   </div>

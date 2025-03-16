@@ -13,8 +13,12 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class FlightDTO {
     private Long id;
-    private String sourceCityName;
-    private String destinationCityName;
+    private String sourceIata;
+    private String sourceCity;
+    private String sourceCountry;
+    private String destinationIata;
+    private String destinationCity;
+    private String destinationCountry;
     private ZonedDateTime departureTime;
     private Duration duration;
     private BigDecimal price;

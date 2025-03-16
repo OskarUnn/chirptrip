@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -18,5 +20,15 @@ public class FlightService {
 
     public List<FlightDTO> getAllFlightDTOs() {
         return flightRepository.findAll().stream().map(Flight::toDTO).toList();
+    }
+
+    public List<FlightDTO> getFilteredFlights(String source, String destination, Double maxPrice, String date) {
+        ZonedDateTime zonedDate = (date != null) ? ZonedDateTime.parse(date) : null;
+        BigDecimal price = (maxPrice != null) ? BigDecimal.valueOf(maxPrice) : null;
+
+        return flightRepository.findFlights(source, destination, price, zonedDate)
+                .stream()
+                .map(Flight::toDTO)
+                .toList();
     }
 }

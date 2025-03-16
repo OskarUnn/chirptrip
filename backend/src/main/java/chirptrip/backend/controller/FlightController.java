@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,7 +21,12 @@ public class FlightController {
     private final FlightService flightService;
 
     @GetMapping("/")
-    public ResponseEntity<List<FlightDTO>> getAllFlights() {
-        return ResponseEntity.ok().body(flightService.getAllFlightDTOs());
+    public ResponseEntity<List<FlightDTO>> getFlights(
+            @RequestParam(required = false) String source,
+            @RequestParam(required = false) String destination,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String date) {
+
+        return ResponseEntity.ok().body(flightService.getFilteredFlights(source, destination, maxPrice, date));
     }
 }

@@ -6,6 +6,7 @@ import chirptrip.backend.repository.AirportRepository;
 import chirptrip.backend.repository.FlightRepository;
 import com.opencsv.CSVReader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DataLoader implements CommandLineRunner {
 
     @Value("${openflights.data.airports}")
@@ -55,6 +57,7 @@ public class DataLoader implements CommandLineRunner {
                 airports.add(airport);
             }
             airportRepository.saveAll(airports);
+            log.info("Loaded in data of {} airports from Openflights dataset.", airports.size());
         }
     }
 
@@ -77,13 +80,21 @@ public class DataLoader implements CommandLineRunner {
     private void generateFlights() {
         List<Airport> airports = airportRepository.findAll();
 
+        // Create flights for only ~Europe
+        airports = airports.stream().filter(airport ->
+                airport.getLatitude() > 35
+                && airport.getLatitude() < 72
+                && airport.getLongitude() > -28
+                && airport.getLongitude() < 40
+        ).toList();
+
         if (airports.size() < 2) {
             throw new IllegalStateException("Not enough airports to generate flights");
         }
 
         Random random = new Random(12345678L);
         List<Flight> flights = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             Airport source = airports.get(random.nextInt(airports.size()));
             Airport destination;
 
@@ -101,9 +112,15 @@ public class DataLoader implements CommandLineRunner {
                     .plusHours(random.nextInt(1, 24));
             newFlight.setDepartureTime(departureTime);
 
+            // Generate a price for the flight based on the flight's distance and some randomness
+            double randomPercent = 0.2;
+            double randomPrice = random.nextDouble(1 - randomPercent, 1 + randomPercent) * (newFlight.getDistance() * 0.05);
+            newFlight.setPrice(randomPrice);
+
             flights.add(newFlight);
         }
 
         flightRepository.saveAll(flights);
+        log.info("Initialized database with {} flights.", flights.size());
     }
 }
