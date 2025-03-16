@@ -40,7 +40,7 @@ defineExpose({ updateFilters })
         v-for="flight in filteredFlights"
         :key="flight.id"
         :flight="flight"
-        :hide-source="false"
+        :hide-source="!!filters.source"
       />
     </div>
     <p v-else class="no-results">No flights found</p>

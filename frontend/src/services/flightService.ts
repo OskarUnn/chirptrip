@@ -30,3 +30,13 @@ export const fetchFlights = async (filters?: FlightFilters): Promise<Flight[]> =
     return []
   }
 }
+
+export const fetchFlightById = async (id: string): Promise<Flight | null> => {
+  try {
+    const response = await axios.get<Flight>(`${API_BASE_URL}/flight/${id}`)
+    return response.data
+  } catch (error) {
+    console.error('Error fetching flight:', error)
+    return null
+  }
+}

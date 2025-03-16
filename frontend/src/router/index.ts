@@ -14,6 +14,11 @@ const router = createRouter({
       name: 'seat-selection',
       component: () => import('../views/SeatSelection.vue'),
     },
+    {
+      path: '/booking-success',
+      name: 'booking-success',
+      component: () => import('../views/BookingSuccessView.vue'),
+    },
     // {
     //   path: '/about',
     //   name: 'about',

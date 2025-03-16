@@ -1,42 +1,62 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import type { Flight } from '@/types/Flight'
 import type { Seat } from '@/types/Seat'
 import { fetchFlightSeats, bookSeats } from '@/services/seatsService'
+import { fetchFlightById } from '@/services/flightService'
 import SeatMap from '@/components/SeatMap.vue'
 
 const route = useRoute()
+const router = useRouter()
 const flight = ref<Flight | null>(null)
 const seats = ref<Seat[]>([])
-const selectedSeat = ref<Seat | null>(null)
+const selectedSeats = ref<Seat[]>([])
 const isLoading = ref(false)
+
+const totalPrice = computed(() => {
+  if (!flight.value || !selectedSeats.value.length) return 0
+  return flight.value.price * selectedSeats.value.length
+})
 
 onMounted(async () => {
   const flightId = route.params.flightId as string
   isLoading.value = true
+
+  // Fetch both flight details and seats
+  flight.value = await fetchFlightById(flightId)
   seats.value = await fetchFlightSeats(flightId)
+
   isLoading.value = false
 })
 
 function selectSeat(seat: Seat | null) {
-  if (seat?.occupied) return
-  selectedSeat.value = seat
+  if (!seat || seat.occupied) return
+
+  const existingIndex = selectedSeats.value.findIndex((s) => s.id === seat.id)
+  if (existingIndex >= 0) {
+    selectedSeats.value.splice(existingIndex, 1)
+  } else {
+    selectedSeats.value.push(seat)
+  }
 }
 
 async function confirmSelection() {
-  if (!selectedSeat.value) return
+  if (!selectedSeats.value.length) return
 
   try {
-    const success = await bookSeats([selectedSeat.value])
-    if (success) {
-      // Refresh the seats to update availability
-      const flightId = route.params.flightId as string
-      seats.value = await fetchFlightSeats(flightId)
-      selectedSeat.value = null
+    const bookedSeats = await bookSeats(selectedSeats.value)
+    if (bookedSeats) {
+      // Navigate to success page with booked seats data using query params
+      router.push({
+        name: 'booking-success',
+        query: {
+          bookedSeats: JSON.stringify(bookedSeats),
+          flight: JSON.stringify(flight.value),
+        },
+      })
     } else {
-      // Handle booking failure
-      console.error('Failed to book seat')
+      console.error('Failed to book seats')
     }
   } catch (error) {
     console.error('Error during seat booking:', error)
@@ -46,11 +66,11 @@ async function confirmSelection() {
 
 <template>
   <div class="seat-selection">
-    <h1>Select Your Seat</h1>
+    <h1>Select Your Seats</h1>
 
     <div v-if="isLoading" class="loading">Loading seats...</div>
     <div v-else class="cabin-layout">
-      <SeatMap :seats="seats" :selected-seat="selectedSeat" @select="selectSeat" />
+      <SeatMap :seats="seats" :selected-seats="selectedSeats" @select="selectSeat" />
 
       <div class="legend">
         <div class="legend-item">
@@ -67,8 +87,14 @@ async function confirmSelection() {
         </div>
       </div>
 
-      <div v-if="selectedSeat" class="selection-info">
-        <h3>Selected Seat: {{ selectedSeat.row }}{{ selectedSeat.column }}</h3>
+      <div v-if="selectedSeats.length" class="selection-info">
+        <h3>
+          Selected Seats:
+          <span v-for="seat in selectedSeats" :key="seat.id">
+            {{ seat.row }}{{ seat.column }}
+          </span>
+        </h3>
+        <p class="total-price">Total Price: €{{ totalPrice.toFixed(2) }}</p>
         <button class="confirm-button" @click="confirmSelection">Confirm Selection</button>
       </div>
     </div>
@@ -184,5 +210,20 @@ async function confirmSelection() {
 
 .confirm-button:hover {
   background: var(--primary-dark);
+}
+
+.total-price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-blue);
+  margin: 1rem 0;
+}
+
+.selection-info span {
+  background: var(--primary-light);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin: 0 0.3rem;
 }
 </style>

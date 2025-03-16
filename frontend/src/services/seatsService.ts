@@ -13,12 +13,12 @@ export const fetchFlightSeats = async (flightId: string): Promise<Seat[]> => {
   }
 }
 
-export const bookSeats = async (seats: Seat[]): Promise<boolean> => {
+export const bookSeats = async (seats: Seat[]): Promise<Seat[] | null> => {
   try {
-    await axios.post(`${API_BASE_URL}/seats/`, seats)
-    return true
+    const response = await axios.post(`${API_BASE_URL}/seats/`, seats)
+    return response.data
   } catch (error) {
     console.error('Error booking seats:', error)
-    return false
+    return null
   }
 }

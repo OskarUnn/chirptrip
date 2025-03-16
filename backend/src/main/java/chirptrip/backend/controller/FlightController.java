@@ -5,10 +5,7 @@ import chirptrip.backend.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +31,10 @@ public class FlightController {
                 maxPrice,
                 departureDateStart,
                 departureDateEnd));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FlightDTO> getFlight(@PathVariable String id) {
+        return ResponseEntity.ok().body(flightService.getFlightDTO(Long.parseLong(id)));
     }
 }

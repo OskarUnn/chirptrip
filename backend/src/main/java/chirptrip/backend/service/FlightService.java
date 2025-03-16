@@ -43,4 +43,8 @@ public class FlightService {
         log.info("Found {} flights.", flights.size());
         return flights.stream().map(Flight::toDTO).toList();
     }
+
+    public FlightDTO getFlightDTO(Long id) {
+        return flightRepository.findById(id).orElseThrow().toDTO();
+    }
 }

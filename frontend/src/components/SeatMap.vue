@@ -4,7 +4,7 @@ import SeatRow from '@/components/SeatRow.vue'
 
 const props = defineProps<{
   seats: Seat[]
-  selectedSeat: Seat | null
+  selectedSeats: Seat[]
 }>()
 
 const emit = defineEmits<{
@@ -23,7 +23,7 @@ const columns = [...new Set(props.seats.map((seat) => seat.column))].sort()
         :row="row"
         :columns="columns"
         :seats="seats.filter((s) => s.row === row)"
-        :selected-seat="selectedSeat"
+        :selected-seats="selectedSeats"
         @select="(seat) => emit('select', seat)"
       />
     </div>

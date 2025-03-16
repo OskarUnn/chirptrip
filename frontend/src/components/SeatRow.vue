@@ -5,7 +5,7 @@ const props = defineProps<{
   row: number
   columns: string[]
   seats: Seat[]
-  selectedSeat: Seat | null
+  selectedSeats: Seat[]
 }>()
 
 const emit = defineEmits<{
@@ -17,7 +17,7 @@ function getSeatClass(seat: Seat | undefined) {
   return {
     'seat-button': true,
     occupied: seat.occupied,
-    selected: props.selectedSeat?.id === seat.id,
+    selected: props.selectedSeats.some((s) => s.id === seat.id),
   }
 }
 </script>
