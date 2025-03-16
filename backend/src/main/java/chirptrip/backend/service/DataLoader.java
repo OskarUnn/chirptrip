@@ -29,6 +29,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final AirportRepository airportRepository;
     private final FlightRepository flightRepository;
+    private final SeatService seatService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -122,5 +123,7 @@ public class DataLoader implements CommandLineRunner {
 
         flightRepository.saveAll(flights);
         log.info("Initialized database with {} flights.", flights.size());
+
+        flights.forEach(seatService::createSeatsForFlight);
     }
 }
