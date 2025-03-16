@@ -1,30 +1,49 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, defineExpose } from 'vue'
 import type { Flight } from '@/types/Flight'
 import { fetchFlights } from '@/services/flightService'
 import FlightCard from '@/components/FlightCard.vue'
 
-const flights = ref<Flight[]>([])
+const allFlights = ref<Flight[]>([])
+const filters = ref({
+  sourceCity: '',
+  destinationCity: '',
+  maxPrice: null as number | null,
+})
+
+const isLoading = ref(false)
+
+const filteredFlights = computed(() => allFlights.value)
 
 const loadFlights = async () => {
-  flights.value = await fetchFlights()
+  isLoading.value = true
+  allFlights.value = await fetchFlights(filters.value)
+  isLoading.value = false
+}
+
+const updateFilters = (newFilters: typeof filters.value) => {
+  filters.value = newFilters
+  loadFlights()
 }
 
 onMounted(loadFlights)
+
+defineExpose({ updateFilters })
 </script>
 
 <template>
   <div class="flight-list">
     <h1>Available Flights</h1>
-    <div v-if="flights.length" class="flight-grid">
+    <div v-if="isLoading" class="loading">Loading flights...</div>
+    <div v-else-if="filteredFlights.length" class="flight-grid">
       <FlightCard
-        v-for="flight in flights"
+        v-for="flight in filteredFlights"
         :key="flight.id"
         :flight="flight"
         :hide-source="false"
       />
     </div>
-    <p v-else class="loading">Loading flights...</p>
+    <p v-else class="no-results">No flights found</p>
   </div>
 </template>
 
@@ -39,7 +58,8 @@ onMounted(loadFlights)
   grid-template-columns: 1fr;
 }
 
-.loading {
+.loading,
+.no-results {
   text-align: center;
   color: var(--text-muted);
   font-size: 1.2rem;

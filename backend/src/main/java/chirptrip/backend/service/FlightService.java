@@ -22,11 +22,11 @@ public class FlightService {
         return flightRepository.findAll().stream().map(Flight::toDTO).toList();
     }
 
-    public List<FlightDTO> getFilteredFlights(String source, String destination, Double maxPrice, String date) {
+    public List<FlightDTO> getFilteredFlights(String sourceCity, String destinationCity, Double maxPrice, String date) {
         ZonedDateTime zonedDate = (date != null) ? ZonedDateTime.parse(date) : null;
         BigDecimal price = (maxPrice != null) ? BigDecimal.valueOf(maxPrice) : null;
 
-        return flightRepository.findFlights(source, destination, price, zonedDate)
+        return flightRepository.findFlights(sourceCity, destinationCity, price, zonedDate)
                 .stream()
                 .map(Flight::toDTO)
                 .toList();
